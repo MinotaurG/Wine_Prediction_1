@@ -5,10 +5,10 @@ from sklearn import preprocessing, svm
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 # Load the pickled data and store it in a global variable
-with open('finalized_model.sav', 'rb') as f:
+with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
    
 
@@ -41,12 +41,17 @@ def process_form():
     input11 = float(request.form['input11'])
     input12 = float(request.form['input12'])
     input13 = float(request.form['input13']) 
-    
-    data = [input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13]
-              
-    
-    return data
+
+   testdata = [input1, input2, input3, input4, input5, input6, input7, input8, input9, input10, input11, input12, input13]
+   testdata = np.array(testdata)
+   testdata = testdata.reshape(-1,1)
+   testdata = np.transpose(testdata)
+                    
+                    
+    data = model.predict([testdata])  
+    data_str = ", ".join(str(x) for x in data)
+    return data_str
 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if _name_ == "_main_":
+    app.run(host="0.0.0.0", port=5000)
